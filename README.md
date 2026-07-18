@@ -1,5 +1,9 @@
 # Renderer
 
+[![CI](https://github.com/RicheyWorks/Renderer/actions/workflows/ci.yml/badge.svg)](https://github.com/RicheyWorks/Renderer/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Java 17](https://img.shields.io/badge/Java-17-orange.svg)](https://adoptium.net/)
+
 The fifth engine of the ecosystem: the **materialized-view engine** — where the drippings are
 collected and rendered down. [SmokeHouse](../SmokeHouse) preserves, [CSRBT](../CSRBT) orders,
 [SuperBeefSort](../SuperBeefSort) feeds, [Carver](../Carver) decides how to read — **Renderer
@@ -34,6 +38,24 @@ try (SmokeHouse<Long, String> store = SmokeHouse.open(dir, opts);
   `(total, group)`, so top-k, and percentile are tree walks, not sorts.
 - **Single writer per view.** The tail thread is the only writer; readers synchronize on the
   view. Composition, not modification — public SmokeHouse surfaces only.
+
+## Roadmap (measure before cutting)
+
+More folds (min/max per group, sliding windows), auto-refold on gap behind an explicit policy
+flag, and an `IndexedStore`-shaped read facade so [Carver](https://github.com/RicheyWorks/Carver)
+can cost view walks against primary walks — each lands with its own oracle test, and JMH
+arrives with the first real fold-throughput question.
+
+## The ecosystem
+
+| Engine | Role |
+|---|---|
+| [CSRBT](https://github.com/RicheyWorks/CSRBT) | the adaptive ordered index |
+| [SuperBeefSort](https://github.com/RicheyWorks/SuperBeefSort) | the intake tract — profiles, sorts, feeds |
+| [SmokeHouse](https://github.com/RicheyWorks/SmokeHouse) | the log-structured store — tail, watchers, replicas |
+| [Carver](https://github.com/RicheyWorks/Carver) | the read planner — decides how to read |
+| **Renderer** (this repo) | the materialized-view engine over the tail |
+| [Brine](https://github.com/RicheyWorks/Brine) | the adaptive cache with an evolved eviction policy |
 
 ## Build
 
