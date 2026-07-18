@@ -1,0 +1,9 @@
+# Matched to the siblings' catalogs so the ecosystem shares one test stack.
+# JMH lands with Renderer's own measure phase (measure before cutting — the ring's rule).
+[versions]
+junit = "5.14.4"
+
+[libraries]
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
