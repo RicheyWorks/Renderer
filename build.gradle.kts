@@ -1,5 +1,6 @@
 plugins {
     `java-library`
+    `maven-publish`   // Phase 9: local repo today; Central rides csrbt-core's release
 }
 
 group = "io.github.richeyworks"
@@ -30,4 +31,35 @@ tasks.test {
     systemProperty("log4j2.loggerContextFactory",
             "org.apache.logging.log4j.simple.SimpleLoggerContextFactory")
     systemProperty("org.apache.logging.log4j.simplelog.StatusLogger.level", "OFF")
+}
+
+// Phase 9 (outer-ring ADR): make the ring locally installable — ./gradlew publishToMavenLocal.
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            artifactId = "renderer"
+            from(components["java"])
+            pom {
+                name = "Renderer"
+                description = "A materialized-view engine folding SmokeHouse's tail into CSRBT-held aggregates — the fifth engine of the CSRBT ecosystem."
+                url = "https://github.com/RicheyWorks/Renderer"
+                licenses {
+                    license {
+                        name = "MIT License"
+                        url = "https://opensource.org/licenses/MIT"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "RicheyWorks"
+                        name = "Richmond"
+                    }
+                }
+                scm {
+                    url = "https://github.com/RicheyWorks/Renderer"
+                    connection = "scm:git:https://github.com/RicheyWorks/Renderer.git"
+                }
+            }
+        }
+    }
 }
